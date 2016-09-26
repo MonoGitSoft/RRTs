@@ -180,13 +180,10 @@ void RRTs::PathPlaning(Node goal) {
         path.push_back(iter);
         iter = iter->parent;
     }
-    iter = path[0];
     Node *tempbegin;
-    Node *tempfront;
-    Node *reduce;
     reducedPath.push_back(*path[0]);
     std::vector<Node*>::iterator begin = path.begin();
-    std::vector<Node*>::iterator front = begin + 2;
+    std::vector<Node*>::iterator front = begin + 1;
     std::vector<Node*>::iterator good = begin + 1;
     bool crash = false;
     while(good != (path.end() - 1)) {
