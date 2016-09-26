@@ -43,29 +43,29 @@ std::pair<Node*,double> DistFromGraf(Node* parent, Node* child, Node* rand) { //
     Vec2 CF = FC*(-1);
     Vec2 FR = PR - PF;
     Vec2 CR = PR - PC;
-    double alfa = SubtendedAngle(FC,FR,CR);
-    double beta = SubtendedAngle(CF,CR,FR);
-    if(alfa > (90 * PI/180)) {
+    double cosAlfa = SubtendedCos(FC,FR,CR);
+    double cosBeta = SubtendedCos(CF,CR,FR);
+    if(cosAlfa <= 0) {
         ret.first = parent;
         ret.second = FR.Lenght();
         return ret;
     }
-    if(beta > (90* PI/180)) {
+    if(cosBeta <= 0) {
         ret.first = child;
         ret.second = CR.Lenght();
         return ret;
     }
+    double sinAlfa = sqrt(1 - pow(cosAlfa,2));
     Vec2 FCNorm = FC.Norm();
-    Vec2 FN = FCNorm*(cos(alfa)*FR.Lenght());
+    Vec2 FN = FCNorm*(cosAlfa*FR.Lenght());
     Vec2 PN = PF + FN;
     Node* newNode = new Node;
     newNode->x = PN.x;
     newNode->y = PN.y;
     newNode->parent = parent;
     newNode->childern.push_back(child);
-    std::vector<Node*>::iterator it;
     ret.first = newNode;
-    ret.second = sin(alfa)*FR.Lenght();
+    ret.second = sinAlfa*FR.Lenght();
     return ret;
 }
 

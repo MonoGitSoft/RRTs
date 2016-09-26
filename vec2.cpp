@@ -50,6 +50,10 @@ void Vec2::Print(void) {
     std::cout<<x<<" "<<y<<std::endl;
 }
 
+double Vec2::operator*(Vec2 other) {
+    return this->x*other.x + this->y-other.y;
+}
+
 double SubtendedAngle(Vec2 a, Vec2 b, Vec2 c) {
     double g = ((pow(a.Lenght(),2) + pow(b.Lenght(),2) - pow(c.Lenght(),2))/(2*a.Lenght()*b.Lenght()));
     if(g > 1) {
@@ -60,4 +64,15 @@ double SubtendedAngle(Vec2 a, Vec2 b, Vec2 c) {
     }
 
     return acos(g);
+}
+
+double SubtendedCos(Vec2 a, Vec2 b, Vec2 c) {
+    double g = ((pow(a.Lenght(),2) + pow(b.Lenght(),2) - pow(c.Lenght(),2))/(2*a.Lenght()*b.Lenght()));
+    if(g > 1) {
+        return 1;
+    }
+    if(g < -1) {
+        return -1;
+    }
+    return g;
 }

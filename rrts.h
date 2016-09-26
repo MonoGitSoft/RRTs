@@ -9,7 +9,7 @@ class Obstacle {
 public:
     Obstacle();
     Obstacle(double x, double y);
-    bool IsCollision(Node inGraf, Node* randNode);
+    bool IsCollision(Node inGraf, Node* randNode, bool edit = true);
     void CircVecDist(Node* random, Node graf);
     double x;
     double y;
@@ -32,6 +32,7 @@ public:
     double maxMapSizeY;
     Node goal;
     std::vector<Node*> path;
+    std::vector<Node> reducedPath;
 };
 
 #endif // RRTS_H

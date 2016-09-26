@@ -59,7 +59,7 @@ double sgn(double sign) {
     }
 }
 
-bool Obstacle::IsCollision(Node inGraf, Node *randNode) {
+bool Obstacle::IsCollision(Node inGraf, Node *randNode,bool edit) {
     Vec2 F(inGraf);
     Vec2 O(x,y);
     Vec2 R(*randNode);
@@ -67,19 +67,30 @@ bool Obstacle::IsCollision(Node inGraf, Node *randNode) {
     Vec2 RO = O - R;
     Vec2 FO = O - F;
     Vec2 newNode;
-    double alfa = SubtendedAngle(FO,RF,RO);
-    double beta = SubtendedAngle(RO,RF,FO);
-    if((((RO.Lenght() <= r) && (beta > (90*PI/180)) ) || ((sin(alfa)*FO.Lenght() <= r) && (beta < (90*PI/180)))) && (alfa < (90*PI/180))) {
-        newNode = R + RF.Norm()*(r + RO.Lenght()*cos(beta) - (r - sqrt(pow(r,2) - pow(sin(beta)*RO.Lenght(),2))));
-        randNode->x = newNode.x;
-        randNode->y = newNode.y;
-        return true;
+    double cosAlfa = SubtendedCos(FO,RF,RO);
+    double cosBeta = SubtendedCos(RO,RF,FO);
+    double sinAlfa = sqrt(1 - pow(cosAlfa,2));
+    double sinBeta = sqrt(1 -pow(cosBeta,2));
+    if(edit) {
+        if((((RO.Lenght() <= r) && (cosBeta < 0) ) || (( sinAlfa*FO.Lenght() <= r) && (cosBeta > 0))) && (cosAlfa > 0)) {
+            newNode = R + RF.Norm()*(r + RO.Lenght()*cosBeta - (r - sqrt(pow(r,2) - pow(sinBeta*RO.Lenght(),2))));
+            randNode->x = newNode.x;
+            randNode->y = newNode.y;
+            return true;
+        }
+        return false;
     }
-    return false;
+    else {
+        if((((RO.Lenght() <= r*0.99) && (cosBeta < 0) ) || (( sinAlfa*FO.Lenght() <= r*0.99) && (cosBeta > 0))) && (cosAlfa > 0)) {
+            return true;
+        }
+        return false;
+    }
 }
 
 
-RRTs::RRTs(std::vector<std::pair<double,double> > map,Node firstNode ,double maxX, double maxY): maxMapSizeX(maxX), maxMapSizeY(maxY), graf(), path() {
+RRTs::RRTs(std::vector<std::pair<double,double> > map,Node firstNode ,double maxX, double maxY): maxMapSizeX(maxX),
+    maxMapSizeY(maxY), graf(), path(), reducedPath() {
     this->map = map;
     Obstacle temp;
     Node* first = new Node[1];
@@ -169,15 +180,44 @@ void RRTs::PathPlaning(Node goal) {
         path.push_back(iter);
         iter = iter->parent;
     }
+    iter = path[0];
+    Node *tempbegin;
+    Node *tempfront;
+    Node *reduce;
+    reducedPath.push_back(*path[0]);
+    std::vector<Node*>::iterator begin = path.begin();
+    std::vector<Node*>::iterator front = begin + 2;
+    std::vector<Node*>::iterator good = begin + 1;
+    bool crash = false;
+    while(good != (path.end() - 1)) {
+        for(begin; front != path.end(); front++) {
+            tempbegin = *begin;
+            for(int i = 0; i < obstacles.size(); i++) {
+                if(obstacles[i].IsCollision(*tempbegin,*front,false)) {
+                    crash = true;
+                    break;
+                }
+            }
+            if(!crash) {
+                good = front;
+            }
+            crash = false;
+        }
+        begin = good;
+        front = begin + 1;
+        reducedPath.push_back(**good);
+    }
 }
 
 void RRTs::ExportGraf() {
      ofstream myfile;
      ofstream mapfile;
      ofstream pathfile;
+     ofstream reducedPathfile;
      myfile.open("graf.txt");
      mapfile.open("map.txt");
      pathfile.open("path.txt");
+     reducedPathfile.open("reducedpath.txt");
      for(int i = 0; i < graf.size(); i++) {
          for(int j = 0; j < graf[i]->childern.size(); j++) {
                  myfile<<graf[i]->x<<" "<<graf[i]->y<<endl;
@@ -189,5 +229,8 @@ void RRTs::ExportGraf() {
      }
      for(int i = 0; i < path.size(); i++) {
          pathfile<<path[i]->x<<" "<<path[i]->y<<endl;
+     }
+     for(int i = 0; i < reducedPath.size(); i++) {
+         reducedPathfile<<reducedPath[i].x<<" "<<reducedPath[i].y<<endl;
      }
 }

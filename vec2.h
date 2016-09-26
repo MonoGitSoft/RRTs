@@ -13,6 +13,7 @@ public:
     Vec2 operator+(Vec2 other);
     Vec2 operator-(Vec2 other);
     Vec2 operator*(double scalar);
+    double operator*(Vec2 other);
     double Lenght();
     Vec2 Norm();
     void Print();
@@ -21,5 +22,5 @@ public:
 };
 
 double SubtendedAngle(Vec2 a, Vec2 b, Vec2 c);
-
+double SubtendedCos(Vec2 a, Vec2 b, Vec2 c);
 #endif // VEC2_H

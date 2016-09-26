@@ -11,56 +11,11 @@ using namespace std;
 vector< pair<double,double> >  MapGenerator(void) {
     pair<double,double> seed;
     vector< pair<double,double> > map;
-    /*for(int i = 1; i < 10; i++) {
-        seed.first = 0;
-        seed.second = i*15 + 10;
-        map.push_back(seed);
-    }
-    for(int i = 1; i < 20; i++) {
-        seed.first = 55;
-        seed.second = i*10 - 100;
-        map.push_back(seed);
-    }
-    for(int i = 1; i < 20; i++) {
-        seed.first = -100;
-        seed.second = i*10 - 100;
-        map.push_back(seed);
-    }
-    for(int i = 1; i < 20; i++) {
-        seed.second = -100;
-        seed.first = i*10 - 100;
-        map.push_back(seed);
-    }
-    for(int i = 1; i < 20; i++) {
-        seed.second = i*10;
-        seed.first = 150;
-        map.push_back(seed);
-    }
-    for(int i = 1; i < 20; i++) {
-        seed.second = 0;
-        seed.first = 150 + i*10;
-        map.push_back(seed);
-    }
-    for(int i = 1; i < 20; i++) {
-        seed.second = 200;
-        seed.first = 150 + i*10;
-        map.push_back(seed);
-    }
-    for(int i = 1; i < 15; i++) {
-        seed.second = i*10 + 20;
-        seed.first = 350;
-        map.push_back(seed);
-    }*/
     for(int i = 1; i < 80; i++) {
         seed.second = i*10 - 300;
         seed.first = -200;
         map.push_back(seed);
     }
-   /* for(int i = 1; i < 80; i++) {
-        seed.second = -i*10 + 300;
-        seed.first = -100;
-        map.push_back(seed);
-    }*/
     for(int i = 1; i < 70; i++) {
         seed.second = i*10 - 500;
         seed.first = 0;
@@ -76,11 +31,6 @@ vector< pair<double,double> >  MapGenerator(void) {
         seed.first = 300 + i*10;
         map.push_back(seed);
     }
-   /* for(int i = 1; i < 80; i++) {
-        seed.second = -i*10 + 300;
-        seed.first = 100;
-        map.push_back(seed);
-    }*/
     /*seed.first = 80;
     seed.second = 80;
     map.push_back(seed);
