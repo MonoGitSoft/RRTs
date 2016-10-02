@@ -7,10 +7,36 @@
 #include <stdlib.h>
 #include <time.h>
 #include <fstream>
+#include "dijkstra.h"
 
 #define PI 3.141592
 
 using namespace std;
+
+class graph
+{
+public:
+    int v;
+    double **matrix;
+    graph(int V) {
+        v = V;
+        matrix = new double*[V];
+        for(int i = 0; i < V; i++){
+            matrix[i] = new double[V];
+            for(int j = 0; j < V; j++) {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+    void addEdge(int i,int j, double weight) {
+        matrix[i][j] = weight;
+        matrix[j][i] = weight;
+    }
+
+    ~graph() {
+        delete matrix;
+    }
+};
 
 Obstacle::Obstacle(double x, double y): x(x), y(y) {
 }
@@ -90,7 +116,7 @@ bool Obstacle::IsCollision(Node inGraf, Node *randNode,bool edit) {
 
 
 RRTs::RRTs(std::vector<std::pair<double,double> > map,Node firstNode ,double maxX, double maxY): maxMapSizeX(maxX),
-    maxMapSizeY(maxY), graf(), path(), reducedPath() {
+    maxMapSizeY(maxY), graf(), path(), reducedPath(), sendPath(), dijkPath() {
     this->map = map;
     Obstacle temp;
     Node* first = new Node[1];
@@ -204,6 +230,37 @@ void RRTs::PathPlaning(Node goal) {
         front = begin + 1;
         reducedPath.push_back(**good);
     }
+
+    Vec2 *tempVec;
+    for(int i = reducedPath.size() - 1; i > 0; i--) {
+        tempVec = new Vec2(reducedPath[i - 1],reducedPath[i]);
+        sendPath.push_back(*tempVec);
+        delete tempVec;
+    }
+    /*-----Dijkstra path search-----*/
+    graph g(path.size());
+    bool collide = false;
+    int c = 0;
+    for(int i = 0; i < path.size() - 1; i++) {
+        for(int j = i + 1; j < path.size(); j++) {
+            for(int k = 0; k < obstacles.size(); k++) {
+                if( obstacles[k].IsCollision(*path[i],path[j],false) ) {
+                    collide = true;
+                    break;
+                }
+            }
+            if(!collide) {
+                g.addEdge(i,j,Distance(path[i],path[j]));
+                c++;
+            }
+            collide = false;
+        }
+    }
+    vector<int> p;
+    p = dijkstra(g.matrix,0,g.v);
+    for(int i = 0; i < p.size(); i++) {
+        dijkPath.push_back(*path[p[i]]);
+    }
 }
 
 void RRTs::ExportGraf() {
@@ -211,10 +268,14 @@ void RRTs::ExportGraf() {
      ofstream mapfile;
      ofstream pathfile;
      ofstream reducedPathfile;
+     ofstream sendPathfile;
+     ofstream dijkstrafile;
+     dijkstrafile.open("dijkstra.txt");
      myfile.open("graf.txt");
      mapfile.open("map.txt");
      pathfile.open("path.txt");
      reducedPathfile.open("reducedpath.txt");
+     sendPathfile.open("sendpath.txt");
      for(int i = 0; i < graf.size(); i++) {
          for(int j = 0; j < graf[i]->childern.size(); j++) {
                  myfile<<graf[i]->x<<" "<<graf[i]->y<<endl;
@@ -229,5 +290,11 @@ void RRTs::ExportGraf() {
      }
      for(int i = 0; i < reducedPath.size(); i++) {
          reducedPathfile<<reducedPath[i].x<<" "<<reducedPath[i].y<<endl;
+     }
+     for(int i = 0; i < sendPath.size(); i++) {
+         sendPathfile<<sendPath[i].x<<" "<<sendPath[i].y<<endl;
+     }
+     for(int i = 0; i < dijkPath.size(); i++) {
+         dijkstrafile<<dijkPath[i].x<<" "<<dijkPath[i].y<<endl;
      }
 }

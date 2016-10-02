@@ -4,6 +4,7 @@
 #include "vec2.h"
 #include <fstream>
 
+
 #define PI 3.141592
 
 using namespace std;
@@ -136,7 +137,7 @@ void VecTest() {
 
 int main(int argc, char *argv[])
 {
-    Node firstNode(-400,-200);
+    Node firstNode(-400,200);
     Node goal(400,200);
     firstNode.partOf = true;
     vector< pair<double,double> > map;
@@ -147,3 +148,4 @@ int main(int argc, char *argv[])
     //VecTest();
     return 0;
 }
+

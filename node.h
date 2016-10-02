@@ -20,5 +20,6 @@ public:
 };
 
 std::pair <Node*,double> DistFromGraf(Node* parent, Node* child, Node* rand);
+double Distance(Node* a, Node* b);
 
 #endif // NODE_H

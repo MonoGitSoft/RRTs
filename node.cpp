@@ -69,3 +69,7 @@ std::pair<Node*,double> DistFromGraf(Node* parent, Node* child, Node* rand) { //
     return ret;
 }
 
+double Distance(Node* a, Node* b) {
+    Vec2 c(*a,*b);
+    return c.Lenght();
+}

@@ -18,7 +18,7 @@ Vec2::Vec2(Node a) {
 
 Vec2::Vec2(Node a, Node b) {
     x = a.x - b.x;
-    y = a.y - b.x;
+    y = a.y - b.y;
 }
 
 Vec2 Vec2::operator +(Vec2 other) {

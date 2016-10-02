@@ -33,6 +33,8 @@ public:
     Node goal;
     std::vector<Node*> path;
     std::vector<Node> reducedPath;
+    std::vector<Vec2> sendPath;
+    std::vector<Node> dijkPath;
 };
 
 #endif // RRTS_H
