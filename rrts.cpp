@@ -172,7 +172,7 @@ Node* RRTs::ClosestNode(Node *randNode) {
 Node* RRTs::RandNode() {
     Node* randNode;
     int choice = rand() % 100;
-    if( choice < 90) {
+    if( choice < 95) {
         randNode = new Node;
         randNode->x = (double)((rand() % (int)(200*maxMapSizeX)) - (100*maxMapSizeX))/100;
         randNode->y = (double)((rand() % (int)(200*maxMapSizeY)) - (100*maxMapSizeY))/100;

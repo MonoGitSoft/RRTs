@@ -32,6 +32,16 @@ vector< pair<double,double> >  MapGenerator(void) {
         seed.first = 300 + i*10;
         map.push_back(seed);
     }
+    for(int i = 1; i < 40; i++) {
+        seed.first = 300;
+        seed.second = i*10;
+        map.push_back(seed);
+    }
+    for(int i = 1; i < 20; i++) {
+        seed.first = -200 - i*10;
+        seed.second = -300;
+        map.push_back(seed);
+    }
     /*seed.first = 80;
     seed.second = 80;
     map.push_back(seed);
