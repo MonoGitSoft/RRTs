@@ -2,6 +2,7 @@
 #define VEC2_H
 
 #include "node.h"
+#include <iostream>
 
 class Vec2 {
 public:
@@ -17,10 +18,16 @@ public:
     double Lenght();
     Vec2 Norm();
     void Print();
+    void Merolegese();
+    void RoundPoz90();
+    void RoundMinusz90();
     double x;
     double y;
 };
 
+double Distance(Vec2 a, Vec2 b);
 double SubtendedAngle(Vec2 a, Vec2 b, Vec2 c);
 double SubtendedCos(Vec2 a, Vec2 b, Vec2 c);
+double SkalarCos(Vec2 a, Vec2 b);
+std::ostream& operator<<(std::ostream& os,const Vec2 a);
 #endif // VEC2_H

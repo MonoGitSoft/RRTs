@@ -9,10 +9,10 @@
 
 using namespace std;
 
-vector< pair<double,double> >  MapGenerator(void) {
+vector< AncientObstacle* >  MapGenerator(void) {
     pair<double,double> seed;
     vector< pair<double,double> > map;
-    for(int i = 1; i < 80; i++) {
+   /* for(int i = 1; i < 80; i++) {
         seed.second = i*10 - 300;
         seed.first = -200;
         map.push_back(seed);
@@ -41,38 +41,31 @@ vector< pair<double,double> >  MapGenerator(void) {
         seed.first = -200 - i*10;
         seed.second = -300;
         map.push_back(seed);
-    }
-    /*seed.first = 80;
-    seed.second = 80;
-    map.push_back(seed);
-    seed.first = -80;
-    seed.second = -80;/
-    map.push_back(seed);*/
-    return map;
-}
-
-void test(void){
-        vector< pair<double,double> > map;
-        Node firstNode(0,0);
-        Node J(10,10,&firstNode);
-        Node B(-10,10,&firstNode);
-        RRTs test(map,firstNode,100,100);
-        test.graf.push_back(&J);
-        test.graf.push_back(&B);
-        Node rand(10,0);
-        Node* closest;
-        closest = test.ClosestNode(&rand);
-        cout<<closest->x<<" "<<closest->y<<endl;
-        cout<<closest->parent->x<<" "<<closest->parent->y<<endl;
-        //cout<<closest->childern[0]->x<<" "<<closest->childern[0]->y<<endl;
-        cout<<"asdasd"<<endl;
-        if(!test.IsPartOfGraf(closest)) {
-            test.InsertToGraf(closest);
-        }
-        rand.parent = closest;
-        test.InsertToGraf(&rand);
-        test.ExportGraf();
-
+    }*/
+    Vec2 a(-200,-300);
+    Vec2 b(-200,500);
+    Vec2 c(0,-500);
+    Vec2 d(0,200);
+    Vec2 e(-100,0);
+    Vec2 f(200,300);
+    Vec2 g(200,250);
+    Vec2 h(-50,300);
+    Vec2 k(300,500);
+    Vec2 l(300,-200);
+    AncientObstacle* newobs;
+    StraightObstacle* newtemp;
+    vector<AncientObstacle*> obstacles;
+    newobs = new StraightObstacle(a,b);
+    obstacles.push_back(newobs);
+    newobs = new StraightObstacle(c,d);
+    obstacles.push_back(newobs);
+    newobs = new StraightObstacle(e,f);
+    obstacles.push_back(newobs);
+    newobs = new StraightObstacle(g,h);
+    obstacles.push_back(newobs);
+    newobs = new StraightObstacle(k,l);
+    obstacles.push_back(newobs);
+    return obstacles;
 }
 
 void DistTest() {
@@ -86,47 +79,6 @@ void DistTest() {
     cout<<result->x<<" "<<result->y<<endl;
     cout<<result->parent->childern[0]->x<<" "<<result->parent->childern[0]->y<<endl;
    // cout<<result->childern[0]->x<<" "<<result->childern[0]->y<<endl;
-}
-
-void CollisionTest(void) {
-    ofstream myfile;
-    ofstream mapfile;
-    myfile.open("graf.txt");
-    mapfile.open("map.txt");
-    Node firstNode(0,0); //Node firstNode(12.82,-77.5);
-    Node J(-10,180,&firstNode); //Node J(50,50,&firstNode);
-    Node B(-200,200,&firstNode);//Node B(-187.83,-187.39,&firstNode);
-    RRTs test(MapGenerator(),firstNode,500,500);
-    //Obstacle obs(-80,-80);
-    Obstacle obs(240,200);
-    Obstacle obs_2(201.5,199.4);
-    vector<Obstacle> os;
-    os = test.obstacles;
-   // os.push_back(obs_2);
-    /*if(obs.IsCollision(firstNode,&J)) {
-        cout<<"ütközés"<<endl;
-        cout<<J.x<<" "<<J.y<<endl;
-    }
-    else {
-        cout<<"nicsn asd"<<endl;
-    }
-    if(obs_2.IsCollision(firstNode,&J)) {
-        cout<<"ütközés"<<endl;
-        cout<<J.x<<" "<<J.y<<endl;
-    }*/
-    for(int i = 0; i < os.size(); i++) {
-        cout<<"elötte: "<<J.x<<" "<<J.y<<endl;
-        os[i].IsCollision(firstNode,&J);
-        cout<<"utana: "<<J.x<<" "<<J.y<<endl;
-    }
-    myfile<<firstNode.x<<' '<<firstNode.y<<endl;
-    myfile<<J.x<<' '<<J.y<<endl;
-    myfile<<firstNode.x<<' '<<firstNode.y<<endl;
-    myfile<<B.x<<' '<<B.y<<endl;
-    for(int i = 0; i < os.size();i++) {
-    mapfile<<os[i].x<<' '<<os[i].y<<endl;
-    }
-    // mapfile<<obs_2.x<<' '<<obs_2.y<<endl;
 }
 
 void VecTest() {
@@ -150,12 +102,20 @@ int main(int argc, char *argv[])
     Node firstNode(-400,200);
     Node goal(400,200);
     firstNode.partOf = true;
-    vector< pair<double,double> > map;
+    vector< AncientObstacle* > temp;
     RRTs test(MapGenerator(),firstNode,500,500);
     test.PathPlaning(goal);
     test.ExportGraf();
     //CollisionTest();
     //VecTest();
+   /* Vec2 f(-10,0);
+    Vec2 e(10,0);
+    Node a(2,-10);
+    Node b(25,5);
+    StraightObstacle o(f,e);
+    o.IsCollision(a,&b);
+    o.IsCollision(a,&b);
+    cout<<b.x<<b.y<<endl;*/
     return 0;
 }
 
